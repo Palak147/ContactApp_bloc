@@ -1,82 +1,48 @@
-import 'package:ContactsApp/src/blocs/contact_bloc_provider.dart';
-import 'package:ContactsApp/src/blocs/contact_list_bloc.dart';
-import 'package:ContactsApp/src/screens/add_edit_contact_screen.dart';
-import 'package:ContactsApp/src/widgets/contact_item.dart';
-
+import 'package:ContactsApp/src/bloc/blocs.dart';
+import 'package:ContactsApp/src/screens/screens.dart';
+import 'package:ContactsApp/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-
-import '../widgets/main_drawer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContactListScreen extends StatefulWidget {
-  static const routeName = '/ContactListScreen';
   @override
   _ContactListScreenState createState() => _ContactListScreenState();
 }
 
 class _ContactListScreenState extends State<ContactListScreen> {
-  //ContactListBloc bloc;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    bloc.fetchAllContacts();
-  }
-
   @override
   void initState() {
     super.initState();
-    print('init state called');
+    BlocProvider.of<ContactsBloc>(context).add(LoadContacts());
   }
 
   @override
   Widget build(BuildContext context) {
-    print('biuld called');
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Contact List'),
+      appBar: CustomAppBar(
+        title: 'Contact List',
+        appBar: AppBar(),
+        widgets: <Widget>[],
       ),
-      body: StreamBuilder(
-          stream: bloc.contacts,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  return ContactItem(snapshot.data[index]);
-                },
-                itemCount: snapshot.data.length,
-              );
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          }),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              // bloc.contacts.listen((event) {
-              //   ContactBlocProvider.of(context).updateContact(null);
-              // });
-              return ContactBlocProvider(
-                child: AddEditContactScreen(null),
-              );
-            }),
-          );
+      body: BlocBuilder<ContactsBloc, ContactsState>(
+        builder: (context, state) {
+          if (state is InitialState) {
+            return CircularProgressIndicator();
+          } else if (state is ContactsLoaded) {
+            return ContactList(state);
+          }
+          return Center(child: Text("Contacts app home page"));
         },
-        child: Icon(Icons.add),
       ),
-      drawer: MainDrawer(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: Container(
+        padding: EdgeInsets.all(10),
+        child: FloatingActionButton(
+          onPressed: () => Navigator.of(context)
+              .pushReplacementNamed(EditContactScreen.routeName),
+          child: Icon(Icons.add),
+        ),
+      ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    bloc.dispose();
   }
 }
