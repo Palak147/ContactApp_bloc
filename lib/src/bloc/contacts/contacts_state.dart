@@ -1,14 +1,11 @@
 import 'package:ContactsApp/src/models/contact.dart';
 import 'package:equatable/equatable.dart';
 
-class ContactsState extends Equatable {
+abstract class ContactsState extends Equatable {
   @override
-  List<Contact> get props => throw UnimplementedError();
-}
+  List<Contact> get props => [];
 
-class InitialState extends ContactsState {
-  @override
-  String toString() => 'Initial State';
+  const ContactsState();
 }
 
 class ContactsLoading extends ContactsState {
@@ -18,7 +15,10 @@ class ContactsLoading extends ContactsState {
 
 class ContactsLoaded extends ContactsState {
   final List<Contact> contacts;
-  ContactsLoaded({this.contacts = const []});
+  const ContactsLoaded([this.contacts = const []]);
+
+  @override
+  List<Contact> get props => contacts;
 
   @override
   String toString() => 'ContactsLoaded';

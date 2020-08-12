@@ -11,6 +11,6 @@ class ContactList extends StatelessWidget {
         itemBuilder: (context, index) {
           return ContactItem(state.contacts[index]);
         },
-        itemCount: state.contacts.length);
+        itemCount: state.contacts != null ? state.contacts.length : null);
   }
 }

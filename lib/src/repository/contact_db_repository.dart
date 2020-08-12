@@ -70,19 +70,19 @@ class ContactDbRepository implements ContactRepository {
 
   @override
   Future<List<Contact>> fetchContacts() async {
-    addDummyContacts();
-    return Future.delayed(const Duration(milliseconds: 0), () => dummyContacts);
+    //   addDummyContacts();
+    //   return Future.delayed(const Duration(milliseconds: 0), () => dummyContacts);
+    // }
+    var dbClient = await db;
+    final maps = await dbClient.query(
+      "Contacts",
+      columns: null,
+    );
+    if (maps.length > 0) {
+      return List<Contact>.from(maps.map((contact) => Contact.fromDb(contact)));
+    }
+    return null;
   }
-  // var dbClient = await db;
-  // final maps = await dbClient.query(
-  //   "Contacts",
-  //   columns: null,
-  // );
-  // if (maps.length > 0) {
-  //   return List<Contact>.from(maps.map((contact) => Contact.fromDb(contact)));
-  // }
-  // return null;
-//}
 
   @override
   Future<List<Contact>> fetchFavContacts() {

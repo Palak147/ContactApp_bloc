@@ -1,7 +1,6 @@
-import 'package:ContactsApp/src/bloc/blocs.dart';
-import 'package:ContactsApp/src/screens/screens.dart';
+import 'package:ContactsApp/src/widgets/widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(ContactApp());
@@ -15,15 +14,18 @@ class ContactApp extends StatelessWidget {
         primarySwatch: Colors.pink,
         accentColor: Colors.purple,
       ),
-      home: BlocProvider(
-        create: (context) => ContactsBloc(),
-        child: ContactListScreen(),
-      ),
-      // routes: {
-      //   '/': (ctx) => ContactListScreen(),
-      //   EditContactScreen.routeName: (ctx) => EditContactScreen(),
-      //   FavoriteContactScreen.routeName: (ctx) => FavoriteContactScreen(),
-      // },
+      routes: {
+        // EditContactScreen.routeName: (ctx) {
+        //   return BlocProvider<ContactsBloc>(
+        //     create: (context) => ContactsBloc(),
+        //     child: EditContactScreen(),
+        //   );
+        // },
+
+        //EditContactScreen.routeName: (ctx) => EditContactScreen(),
+        // FavoriteContactScreen.routeName: (ctx) => FavoriteContactScreen(),
+      },
+      home: MainContainerWidget(),
     );
   }
 }

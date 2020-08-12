@@ -1,4 +1,3 @@
-import 'package:ContactsApp/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteContactScreen extends StatelessWidget {
@@ -6,16 +5,8 @@ class FavoriteContactScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        appBar: AppBar(),
-        title: 'Favorite Contacts',
-      ),
-      body: SafeArea(
-        child: Center(
-          child: Text('Favorite Contact Screen'),
-        ),
-      ),
+    return Center(
+      child: Text('Favorite Contact Screen'),
     );
   }
 }

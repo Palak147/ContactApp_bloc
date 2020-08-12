@@ -25,6 +25,9 @@ class AddContact extends ContactsEvent {
 }
 
 class UpdateContact extends ContactsEvent {
+  final Contact updatedContact;
+
+  UpdateContact(this.updatedContact);
   @override
   String toString() => 'UpdateContact';
 
@@ -33,6 +36,9 @@ class UpdateContact extends ContactsEvent {
 }
 
 class DeleteContact extends ContactsEvent {
+  final Contact contact;
+
+  DeleteContact(this.contact);
   @override
   String toString() => 'DeleteContact';
 

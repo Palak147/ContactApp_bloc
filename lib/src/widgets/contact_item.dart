@@ -1,4 +1,4 @@
-import 'package:ContactsApp/src/helpers/UniqueColorGenerator.dart';
+import 'package:ContactsApp/src/helpers/unique_color_generator.dart';
 import 'package:flutter/material.dart';
 
 class ContactItem extends StatelessWidget {

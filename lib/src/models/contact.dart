@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
 
 class Contact extends Equatable {
   final String id;
@@ -8,7 +9,7 @@ class Contact extends Equatable {
   final String landline;
   final bool isFav;
   //final String imageUrl;
-
+  final uuid = Uuid();
   Contact({
     @required this.id,
     @required this.name,
