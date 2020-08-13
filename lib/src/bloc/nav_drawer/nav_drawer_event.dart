@@ -11,5 +11,5 @@ class UpdateNavigation extends NavDrawerEvent {
   const UpdateNavigation(this.destination);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [destination];
 }

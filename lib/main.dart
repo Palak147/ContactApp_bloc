@@ -1,31 +1,41 @@
-import 'package:ContactsApp/src/widgets/widgets.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ContactsApp/src/bloc/blocs.dart';
+import 'package:ContactsApp/src/screens/screens.dart';
+import 'package:ContactsApp/src/widgets/nav_drawer_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(ContactApp());
+  // BlocSupervisor().delegate = SimpleBlocDelegate();
+  runApp(MyApp());
 }
 
-class ContactApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-        accentColor: Colors.purple,
-      ),
       routes: {
-        // EditContactScreen.routeName: (ctx) {
-        //   return BlocProvider<ContactsBloc>(
-        //     create: (context) => ContactsBloc(),
-        //     child: EditContactScreen(),
-        //   );
-        // },
-
-        //EditContactScreen.routeName: (ctx) => EditContactScreen(),
-        // FavoriteContactScreen.routeName: (ctx) => FavoriteContactScreen(),
+        '/': (context) => MultiBlocProvider(
+              child: HomeScreen(),
+              providers: [
+                BlocProvider<NavDrawerBloc>(
+                  create: (context) => NavDrawerBloc(),
+                  child: NavDrawerWidget(),
+                ),
+                BlocProvider<ContactsBloc>(
+                  create: (context) => ContactsBloc(),
+                  child: ContactListScreen(),
+                ),
+                BlocProvider<ContactsBloc>(
+                  create: (context) => ContactsBloc(),
+                  child: EditContactScreen(),
+                ),
+              ],
+            ),
+        EditContactScreen.routeName: (context) => BlocProvider<ContactsBloc>(
+              create: (context) => ContactsBloc(),
+              child: EditContactScreen(),
+            )
       },
-      home: MainContainerWidget(),
     );
   }
 }

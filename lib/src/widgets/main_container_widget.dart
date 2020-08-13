@@ -11,7 +11,6 @@ class MainContainerWidget extends StatefulWidget {
 }
 
 class _MainContainerWidgetState extends State<MainContainerWidget> {
-  ContactsBloc contactsBloc = ContactsBloc();
   @override
   void dispose() {
     super.dispose();
@@ -19,20 +18,36 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocProvider<NavDrawerBloc>(
-        create: (BuildContext context) => NavDrawerBloc(),
-        child: BlocBuilder<NavDrawerBloc, NavDrawerState>(
-          builder: (BuildContext context, NavDrawerState state) => Scaffold(
-              drawer: NavDrawerWidget(),
-              appBar: AppBar(
-                title: Text(_setPageTitle(state.selectedItem)),
-              ),
-              body: _setPageContent(state),
-              floatingActionButtonLocation:
-                  _setActionButtonsLocation(state.selectedItem),
-              floatingActionButton: _setActionButtons(state)),
-        ),
-      );
+  Widget build(BuildContext context) {
+    return BlocProvider<NavDrawerBloc>(
+      create: (context) => NavDrawerBloc(),
+      child: BlocBuilder<NavDrawerBloc, NavDrawerState>(
+        builder: (BuildContext context, NavDrawerState state) => Scaffold(
+            drawer: NavDrawerWidget(),
+            appBar: AppBar(
+              title: Text(_setPageTitle(state.selectedItem)),
+            ),
+            body: _setPageContent(state),
+            floatingActionButtonLocation:
+                _setActionButtonsLocation(state.selectedItem),
+            floatingActionButton: _setActionButtons(state)),
+      ),
+    );
+    // return BlocProvider<NavDrawerBloc>(
+    //   create: (BuildContext context) => NavDrawerBloc(),
+    //   child: BlocBuilder<NavDrawerBloc, NavDrawerState>(
+    //     builder: (BuildContext context, NavDrawerState state) => Scaffold(
+    //         drawer: NavDrawerWidget(),
+    //         appBar: AppBar(
+    //           title: Text(_setPageTitle(state.selectedItem)),
+    //         ),
+    //         body: _setPageContent(state),
+    //         floatingActionButtonLocation:
+    //             _setActionButtonsLocation(state.selectedItem),
+    //         floatingActionButton: _setActionButtons(state)),
+    //   ),
+    // );
+  }
 
   String _setPageTitle(NavItem selectedItem) {
     if (selectedItem == NavItem.contactList)
@@ -55,10 +70,22 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
       //     child: MaterialApp(
       //       home: ContactListScreen(),
       //     ));
-      return BlocProvider<ContactsBloc>(
-        create: (context) => contactsBloc,
-        child: ContactListScreen(),
-      );
+      // return BlocProvider<ContactsBloc>(
+      //   create: (context) => ContactsBloc(),
+      //   child: ContactListScreen(),
+      // );
+      //return ContactListScreen();
+      // return MultiBlocProvider(
+      //   providers: [
+      //     BlocProvider<ContactsBloc>(
+      //         create: (context) => ContactsBloc(), child: ContactListScreen()),
+      //     BlocProvider<ContactsBloc>(
+      //         create: (context) => ContactsBloc(), child: EditContactScreen()),
+      //   ],
+      //   child: MaterialApp(home: ContactListScreen()),
+      // );
+
+      return ContactListScreen();
     else {
       return FavoriteContactScreen();
     }
@@ -77,18 +104,17 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
       // );
       return FloatingActionButton(
         onPressed: () {
-          // Navigator.push(context,
-          //     MaterialPageRoute(builder: (context) => EditContactScreen()));
+          Navigator.pushNamed(context, EditContactScreen.routeName);
 
           //Navigator.pushNamed(context, EditContactScreen.routeName);
 
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BlocProvider<ContactsBloc>(
-                        create: (context) => contactsBloc,
-                        child: EditContactScreen(),
-                      )));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => BlocProvider<ContactsBloc>(
+          //               create: (context) => ContactsBloc(),
+          //               child: EditContactScreen(),
+          //             )));
         },
         child: Icon(Icons.add),
       );

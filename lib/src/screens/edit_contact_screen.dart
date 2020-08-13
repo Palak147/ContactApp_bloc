@@ -1,4 +1,5 @@
 import 'package:ContactsApp/src/bloc/blocs.dart';
+import 'package:ContactsApp/src/bloc/contacts/contacts.dart';
 import 'package:ContactsApp/src/models/contact.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,24 +13,29 @@ class EditContactScreen extends StatefulWidget {
 }
 
 class _EditContactScreenState extends State<EditContactScreen> {
-  final TextEditingController nameController = TextEditingController();
-
-  final TextEditingController mobileController = TextEditingController();
-
-  final TextEditingController landlineController = TextEditingController();
-
+  bool isEditing = false;
+  Contact contact;
+  String _name;
+  String _landline;
+  String _mobile;
   final uuid = Uuid();
-  var contactsBloc;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    contactsBloc = BlocProvider.of<ContactsBloc>(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    contact = ModalRoute.of(context).settings.arguments as Contact;
+
+    if (contact != null) {
+      isEditing = true;
+    } else {
+      contact = new Contact();
+    }
+
     final appBar = AppBar(
-      title: Text('Add New Contact'),
+      title: isEditing ? Text('Update Contact') : Text('Add New Contact'),
       actions: <Widget>[
         IconButton(
             icon: Icon(Icons.star_border), onPressed: () => print('pressed'))
@@ -41,7 +47,7 @@ class _EditContactScreenState extends State<EditContactScreen> {
         child: Column(
           children: <Widget>[
             cameraWidget(context, appBar),
-            contactFormWidget(context, appBar, contactsBloc),
+            contactFormWidget(context, appBar),
           ],
         ),
       ),
@@ -80,8 +86,7 @@ class _EditContactScreenState extends State<EditContactScreen> {
     );
   }
 
-  Widget contactFormWidget(
-      BuildContext context, AppBar appBar, ContactsBloc bloc) {
+  Widget contactFormWidget(BuildContext context, AppBar appBar) {
     return Container(
       padding: EdgeInsets.all(20),
       child: Column(
@@ -89,7 +94,7 @@ class _EditContactScreenState extends State<EditContactScreen> {
           nameField(),
           mobileField(),
           landlineField(),
-          saveButton(bloc, context),
+          saveButton(context),
         ],
       ),
     );
@@ -97,78 +102,61 @@ class _EditContactScreenState extends State<EditContactScreen> {
 
   Widget nameField() {
     return TextFormField(
-      //initialValue: contact.name,
-      controller: nameController,
-      onChanged: null,
+      initialValue: contact.name,
+      onChanged: (value) => _name = value,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Name',
-        //errorText: snapshot.error,
       ),
     );
   }
 
   Widget mobileField() {
     return TextFormField(
-      controller: mobileController,
-      //onChanged: bloc.changeMobile,
+      initialValue: contact.mobile,
+      onChanged: (value) => _mobile = value,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: 'Mobile',
-        //errorText: snapshot.error,
       ),
     );
   }
 
   Widget landlineField() {
     return TextFormField(
-      //initialValue: contact.landline,
-      //onChanged: bloc.changeLandline,
-      controller: landlineController,
+      initialValue: contact.landline,
+      onChanged: (value) => _landline = value,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: 'Landline',
-        //errorText: snapshot.error,
       ),
     );
   }
 
-  Widget saveButton(ContactsBloc bloc, BuildContext context) {
-    return RaisedButton(
-        child: Text('save'),
-        color: Colors.blue,
-        onPressed: () {
-          Contact contact = new Contact(
-            id: uuid.v4(),
-            name: nameController.text,
-            mobile: mobileController.text,
-            landline: landlineController.text,
-          );
-          bloc.add(AddContact(contact));
-          Navigator.pop(context);
-        });
+  Widget saveButton(BuildContext context) {
+    return BlocListener<ContactsBloc, ContactsState>(
+      listener: (context, state) {
+        if (state is AddingContactComplete) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: RaisedButton(
+          child: Text('save'),
+          color: Colors.blue,
+          onPressed: () {
+            Contact newContact = new Contact(
+              id: isEditing ? contact.id : uuid.v4(),
+              name: isEditing && _name == null ? _name = contact.name : _name,
+              mobile: isEditing && _mobile == null
+                  ? _mobile = contact.mobile
+                  : _mobile,
+              landline: isEditing && _landline == null
+                  ? _landline = contact.landline
+                  : _landline,
+            );
+            BlocProvider.of<ContactsBloc>(context).add(
+                isEditing ? UpdateContact(newContact) : AddContact(newContact));
+          }),
+    );
   }
 }
-
-//   Widget updateButton(ContactBloc bloc, Contact contact) {
-//     return StreamBuilder(
-//       stream: bloc.saveValid,
-//       builder: (context, snapshot) {
-//         return RaisedButton(
-//           child: Text('Update'),
-//           color: Colors.blue,
-//           onPressed: snapshot.hasData
-//               ? () {
-//                   bloc.updateContact(contact.id);
-//                   Navigator.of(context).pop(MaterialPageRoute(
-//                     builder: (context) {
-//                       return ContactListScreen();
-//                     },
-//                   ));
-//                 }
-//               : null,
-//         );
-//       },
-//     );
-//   }
-// }

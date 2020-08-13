@@ -21,7 +21,7 @@ class AddContact extends ContactsEvent {
   String toString() => 'AddContact';
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [contact];
 }
 
 class UpdateContact extends ContactsEvent {
@@ -32,7 +32,7 @@ class UpdateContact extends ContactsEvent {
   String toString() => 'UpdateContact';
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [updatedContact];
 }
 
 class DeleteContact extends ContactsEvent {
@@ -43,5 +43,5 @@ class DeleteContact extends ContactsEvent {
   String toString() => 'DeleteContact';
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [contact];
 }

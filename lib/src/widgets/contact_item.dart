@@ -1,5 +1,8 @@
+import 'package:ContactsApp/src/bloc/blocs.dart';
 import 'package:ContactsApp/src/helpers/unique_color_generator.dart';
+import 'package:ContactsApp/src/screens/edit_contact_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ContactItem extends StatelessWidget {
   final contact;
@@ -14,7 +17,12 @@ class ContactItem extends StatelessWidget {
         child: Text(contact.name[0]),
       ),
       title: Text(contact.name),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed(EditContactScreen.routeName, arguments: contact)
+            .then((value) =>
+                BlocProvider.of<ContactsBloc>(context).add(LoadContacts()));
+      },
     );
   }
 }

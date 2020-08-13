@@ -114,14 +114,17 @@ class ContactDbRepository implements ContactRepository {
   @override
   Future<int> updateContact(Contact contact) async {
     var dbClient = await db;
-    return await dbClient.update("Contacts", contact.toDb(),
-        where: "id = ?",
-        whereArgs: [contact.id],
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    return await dbClient.update(
+      "Contacts",
+      contact.toDb(),
+      where: "id = ?",
+      whereArgs: [contact.id],
+    );
   }
 
   @override
-  Future<int> deleteContactById(String id) {
-    throw UnimplementedError();
+  Future<int> deleteContactById(String id) async {
+    var dbClient = await db;
+    return await dbClient.delete("Contacts", where: "id = ?", whereArgs: [id]);
   }
 }
