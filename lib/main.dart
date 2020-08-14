@@ -29,6 +29,10 @@ class MyApp extends StatelessWidget {
                   create: (context) => ContactsBloc(),
                   child: EditContactScreen(),
                 ),
+                BlocProvider<FavContactsBloc>(
+                  create: (context) => FavContactsBloc(),
+                  child: FavoriteContactScreen(),
+                ),
               ],
             ),
         EditContactScreen.routeName: (context) => BlocProvider<ContactsBloc>(

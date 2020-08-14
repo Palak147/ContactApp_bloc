@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ContactsApp/src/bloc/blocs.dart';
 import 'package:ContactsApp/src/helpers/unique_color_generator.dart';
 import 'package:ContactsApp/src/screens/edit_contact_screen.dart';
@@ -13,8 +15,11 @@ class ContactItem extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
       leading: CircleAvatar(
-        backgroundColor: UniqueColorGenerator.getColor(),
-        child: Text(contact.name[0]),
+        backgroundImage:
+            contact.imageUrl != '' ? FileImage(File(contact.imageUrl)) : null,
+        backgroundColor:
+            contact.imageUrl == '' ? UniqueColorGenerator.getColor() : null,
+        child: contact.imageUrl == '' ? Text(contact.name[0]) : null,
       ),
       title: Text(contact.name),
       onTap: () {

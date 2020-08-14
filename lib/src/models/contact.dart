@@ -6,11 +6,13 @@ class Contact extends Equatable {
   final String mobile;
   final String landline;
   final bool isFav;
+  final String imageUrl;
   Contact({
     this.id,
     this.name,
     this.mobile,
     this.landline,
+    this.imageUrl = '',
     this.isFav = false,
   });
   //this.imageUrl = null});
@@ -20,6 +22,7 @@ class Contact extends Equatable {
         name = dbVal['name'],
         mobile = dbVal['mobile'],
         landline = dbVal['landline'],
+        imageUrl = dbVal['imageUrl'],
         isFav = dbVal['isFav'] == 1;
 
   Map<String, dynamic> toDb() {
@@ -28,6 +31,7 @@ class Contact extends Equatable {
       "name": name,
       "mobile": mobile,
       "landline": landline,
+      "imageUrl": imageUrl,
       "isFav": isFav ? 1 : 0
     };
   }
@@ -38,10 +42,11 @@ class Contact extends Equatable {
         mobile,
         landline,
         isFav,
+        imageUrl,
       ];
 
   @override
   String toString() {
-    return 'Contact { id: $id, name :$name, mobile:$mobile, landline:$landline, isFav:$isFav }';
+    return 'Contact { id: $id, name :$name, mobile:$mobile, landline:$landline, isFav:$isFav, imageUrl:$imageUrl }';
   }
 }

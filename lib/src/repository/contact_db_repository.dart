@@ -7,12 +7,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 class ContactDbRepository implements ContactRepository {
-  final String columnId = 'id';
-  final String columnName = 'name';
-  final String columnMobile = 'mobile';
-  final String columnLandline = 'landline';
-  final String columnImage = 'image';
-  final bool columnIsFav = false;
   Database _db;
 
   static var uuid = Uuid();
@@ -59,6 +53,7 @@ class ContactDbRepository implements ContactRepository {
           name TEXT,
           mobile TEXT,
           landline TEXT,
+          imageUrl TEXT,
           isFav INTEGER
         )
 
@@ -70,9 +65,6 @@ class ContactDbRepository implements ContactRepository {
 
   @override
   Future<List<Contact>> fetchContacts() async {
-    //   addDummyContacts();
-    //   return Future.delayed(const Duration(milliseconds: 0), () => dummyContacts);
-    // }
     var dbClient = await db;
     final maps = await dbClient.query(
       "Contacts",
@@ -85,22 +77,12 @@ class ContactDbRepository implements ContactRepository {
   }
 
   @override
-  Future<List<Contact>> fetchFavContacts() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Contact> fetchContactById(String id) async {
+  Future<List<Contact>> fetchFavContacts() async {
     var dbClient = await db;
-    final maps = await dbClient.query(
-      "Contacts",
-      columns: null,
-      where: "id = ?",
-      whereArgs: [id],
-    );
-
+    final maps =
+        await dbClient.query("Contacts", columns: null, where: "isFav = 1");
     if (maps.length > 0) {
-      return Contact.fromDb(maps.first);
+      return List<Contact>.from(maps.map((contact) => Contact.fromDb(contact)));
     }
     return null;
   }
