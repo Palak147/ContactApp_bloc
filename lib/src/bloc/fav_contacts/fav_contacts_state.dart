@@ -15,11 +15,11 @@ class FavContactsLoading extends FavContactsState {
 }
 
 class FavContactsLoaded extends FavContactsState {
-  final List<Contact> favContacts;
-  const FavContactsLoaded({this.favContacts = const []});
+  final List<Contact> contacts;
+  const FavContactsLoaded({this.contacts = const []});
 
   @override
-  List<Object> get props => [favContacts];
+  List<Object> get props => [contacts];
 
   @override
   String toString() => 'FavContactsLoaded';

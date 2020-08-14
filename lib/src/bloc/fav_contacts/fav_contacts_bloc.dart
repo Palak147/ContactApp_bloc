@@ -20,7 +20,7 @@ class FavContactsBloc extends Bloc<FavContactsEvent, FavContactsState> {
   Stream<FavContactsState> _mapLoadContactsToState() async* {
     try {
       final favContacts = await this.contactsRepository.fetchFavContacts();
-      yield FavContactsLoaded(favContacts: favContacts);
+      yield FavContactsLoaded(contacts: favContacts);
     } catch (_) {
       yield FavContactsNotLoaded();
     }
